@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("node:path");
+const cookieParser = require("cookie-parser");
 const utils = require("./utils");
 const db = require("./database");
 
@@ -14,6 +15,8 @@ app.use(express.static(publicDirectory));
 // Parse URL encoded bodies (as sent by HTML forms).
 app.use(express.urlencoded({ extended: false, }));
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.set("view engine", "hbs");
 

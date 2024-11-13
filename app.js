@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const dotenv = require('dotenv');
-const path = require("path");
+const path = require("node:path");
 
 const parseEnvFile = dotenv.config({
     path: path.join(__dirname, '.env'),

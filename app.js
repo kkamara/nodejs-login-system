@@ -38,6 +38,10 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
 const port = process.env.APP_PORT || 3000;
 app.listen(port, () => {
     console.log(`Server started on port ${port}.`);

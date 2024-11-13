@@ -3,6 +3,9 @@ const mysql = require("mysql");
 const dotenv = require('dotenv');
 const path = require("node:path");
 
+const pages = require("./routes/pages");
+const auth = require("./routes/auth");
+
 const parseEnvFile = dotenv.config({
     path: path.join(__dirname, ".env"),
 });
@@ -15,6 +18,10 @@ const app = express();
 
 const publicDirectory = path.join(__dirname, "public");
 app.use(express.static(publicDirectory));
+
+// Parse URL encoded bodies (as sent by HTML forms).
+app.use(express.urlencoded({ extended: false, }));
+app.use(express.json());
 
 app.set("view engine", "hbs");
 
@@ -34,13 +41,9 @@ db.connect(error => {
     }
 });
 
-app.get("/", (req, res) => {
-    res.render("index");
-});
-
-app.get("/register", (req, res) => {
-    res.render("register");
-});
+// Define routes
+app.use("/", pages);
+app.use("/auth", auth);
 
 const port = process.env.APP_PORT || 3000;
 app.listen(port, () => {

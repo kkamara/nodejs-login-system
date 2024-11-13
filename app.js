@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const path = require("node:path");
 
 const parseEnvFile = dotenv.config({
-    path: path.join(__dirname, '.env'),
+    path: path.join(__dirname, ".env"),
 });
 
 if (parseEnvFile.error) {
@@ -12,6 +12,11 @@ if (parseEnvFile.error) {
 }
 
 const app = express();
+
+const publicDirectory = path.join(__dirname, "public");
+app.use(express.static(publicDirectory));
+
+app.set("view engine", "hbs");
 
 const db = mysql.createConnection({
     host: process.env.MYSQL_HOST,
@@ -30,7 +35,7 @@ db.connect(error => {
 });
 
 app.get("/", (req, res) => {
-    res.send("<h1>Home Page</h1>");
+    res.render("index");
 });
 
 const port = process.env.APP_PORT || 3000;

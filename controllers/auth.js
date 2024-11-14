@@ -1,6 +1,7 @@
-const db = require("../database");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { promisify, } = require("util");
+const db = require("../database");
 
 exports.register = (req, res) => {
     console.log(req.body);
@@ -16,7 +17,9 @@ exports.register = (req, res) => {
         [email,],
         async (error, results) => {
             if (error) {
-                console.error(error);
+                if (process.env.NODE_ENV !== "production") {
+                    console.error(error);
+                }
                 return;
             }
             if (results.length > 0) {
@@ -46,7 +49,9 @@ exports.register = (req, res) => {
                 },
                 (error, results) => {
                     if (error) {
-                        console.error(error);
+                        if (process.env.NODE_ENV !== "production") {
+                            console.error(error);
+                        }
                         return;
                     } else {
                         if (process.env.NODE_ENV !== "production") {
@@ -109,5 +114,47 @@ exports.login = async (req, res) => {
         if (process.env.NODE_ENV !== "production") {
             console.error(error);
         }
+    }
+};
+
+exports.isLoggedIn = async (req, res, next) => {
+    if (process.env.NODE_ENV !== "production") {
+        console.log(req.cookies);
+    }
+    if (req.cookies.jwt) {
+        try {
+            // 1). Verify the token
+            const decoded = await promisify(jwt.verify)
+                (req.cookies.jwt, process.env.JWT_SECRET);
+            if (process.env.NODE_ENV !== "production") {
+                console.log(decoded);
+            }
+
+            // 2). Check if the user still exists
+            db.query(
+                "SELECT * FROM users WHERE id = ?",
+                [decoded.id,],
+                (error, results) => {
+                    if (error) {
+                        if (process.env.NODE_ENV !== "production") {
+                            console.error(error);
+                        }
+                        return next();
+                    }
+                    if (!results) {
+                        return next();
+                    }
+                    req.user = results[0];
+                    return next();
+                },
+            );
+        } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                console.error(error);
+            }
+            return next();
+        }
+    } else {
+        return next();
     }
 };

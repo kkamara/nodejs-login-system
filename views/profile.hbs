@@ -12,8 +12,8 @@
         <h4>NodeJS Login System</h4>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/register">Register</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/auth/logout">Logout</a></li>
         </ul>
     </nav>
 
@@ -29,7 +29,7 @@
                         />
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Jane Doe</h5>
+                        <h5 class="card-title">{{ user.name }}</h5>
                         <p class="card-text">Exercitation do fugiat amet voluptate excepteur fugiat sint quis sit.</p>
                         <a href="#" class="btn btn-primary">jane@doe.com</a>
                     </div>
@@ -41,9 +41,9 @@
                         Profile Page
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Hey Jane, welcome back!</h5>
+                        <h5 class="card-title">Hey {{ user.name }}, welcome back!</h5>
                         <p class="card-text">Non reprehenderit nulla et officia esse excepteur consequat aute consectetur.</p>
-                        <a href="#" class="btn btn-primary">Go Somewhere</a>
+                        <a href="#" class="btn btn-primary">{{ user.email }}</a>
                     </div>
                     <div class="card-footer text-muted">
                         NodeJS Login System

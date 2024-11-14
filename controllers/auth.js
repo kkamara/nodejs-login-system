@@ -106,6 +106,8 @@ exports.login = async (req, res) => {
             },
         );
     } catch (error) {
-        console.error(error);
+        if (process.env.NODE_ENV !== "production") {
+            console.error(error);
+        }
     }
 };

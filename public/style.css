@@ -27,3 +27,11 @@ nav li a:hover {
     color: red;
     text-decoration: none;
 }
+.avatar-container {
+    background-color: orange;
+}
+
+.avatar {
+    width: 65%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
